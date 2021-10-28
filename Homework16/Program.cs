@@ -26,16 +26,17 @@ namespace Homework16
         static async Task Main(string[] args)
         {
 
-            const int n = 2;
+            const int n = 5;
 
 
             Goods[] product = new Goods[n];
             var options = new JsonSerializerOptions
             {
                 WriteIndented = true
+                
             };
 
-            using (FileStream fs = new FileStream("Product.json", FileMode.OpenOrCreate))
+            using (FileStream fs = new FileStream("Product.json", FileMode.Create))
              {
                  for (int i = 0; i < n; i++)
                  {
@@ -52,17 +53,34 @@ namespace Homework16
              }
 
            string jsonString = File.ReadAllText("Product.json");
-           Goods Getproduct = JsonSerializer.Deserialize<Goods>(jsonString);
-
-           /* using (FileStream fs = new FileStream("Product.json", FileMode.Open))
+           Goods[] Getproduct = JsonSerializer.Deserialize<Goods[]>(jsonString);
+            double price = 0;
+            for (int i = 0; i < n-1; i++)
             {
 
-                Goods[] Getproduct = new Goods[n];
-                    JsonSerializer.Deserialize<Goods>(fs);
-                //Console.WriteLine($"Код товара: {Getproduct.idProduct}  Наименование товара: {Getproduct.nameProduct}  Цена товара: {Getproduct.priceProduct} ");
+                if (Getproduct[i].priceProduct > Getproduct[i + 1].priceProduct)
+                {
+                    price = Getproduct[i].priceProduct;
+                }
+                else
+                {
+                    price = Getproduct[i + 1].priceProduct;
+                }
+            }
+            for (int i = 0; i < n - 1; i++)
+            {
 
-            }*/
-            Console.ReadKey();
+                if (price == Getproduct[i].priceProduct)
+                {
+                    Console.WriteLine($"Самый дорогой товар: {Getproduct[i].nameProduct}. Цена товара: {price}");
+                    Console.ReadKey();
+                    return;
+                }
+                
+            }
+            
+            Console.WriteLine(price);
+                Console.ReadKey();
         }
         class Goods
         {
